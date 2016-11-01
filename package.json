@@ -1,0 +1,31 @@
+{
+  "name": "ng-chroma",
+  "version": "0.0.3",
+  "description": "Most beautiful spectrum picker for angular 1.5+",
+  "main": "index.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1",
+    "watch": "webpack-dev-server --devtool source-map --hot --inline --content-base=./test/ --config ./webpack.config.test.js"
+  },
+  "author": "",
+  "license": "ISC",
+  "dependencies": {
+    "@iamadamjowett/angular-click-outside": "^2.9.2",
+    "angular": "^1.5.8",
+    "babel-core": "^6.17.0",
+    "babel-loader": "^6.2.5",
+    "babel-plugin-transform-decorators-legacy": "^1.3.4",
+    "babel-plugin-transform-runtime": "^6.15.0",
+    "babel-preset-es2015": "^6.16.0",
+    "babel-preset-stage-0": "^6.16.0",
+    "css-loader": "^0.25.0",
+    "extract-text-webpack-plugin": "^1.0.1",
+    "jquery": "^3.1.1",
+    "less": "^2.7.1",
+    "less-loader": "^2.2.3",
+    "ng-annotate": "^1.2.1",
+    "ng-annotate-loader": "^0.2.0",
+    "raw-loader": "^0.5.1",
+    "webpack": "^1.13.2"
+  }
+}
