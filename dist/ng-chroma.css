@@ -1,0 +1,273 @@
+ng-chroma {
+  position: relative;
+  font-size: 10px;
+  font-family: sans-serif;
+}
+ng-chroma,
+ng-chroma * {
+  box-sizing: border-box;
+}
+ng-chroma .color-picker {
+  display: inline-block;
+}
+ng-chroma .separator {
+  height: 1px;
+  margin-top: 10px;
+  margin-bottom: 10px;
+  border-bottom: 1px dashed #ccc;
+}
+ng-chroma .margin {
+  margin-bottom: 15px;
+}
+ng-chroma .selected-color {
+  font-size: 12px;
+}
+ng-chroma .selected-color-value {
+  font-weight: bold;
+}
+ng-chroma .main-button {
+  padding: 4px;
+  border: 1px solid #ccc;
+  border-radius: 4px;
+  background-color: white;
+  cursor: pointer;
+}
+ng-chroma .main-button-background {
+  width: 20px;
+  height: 20px;
+  display: inline-block;
+  vertical-align: middle;
+  background-image: -webkit-linear-gradient(45deg, #ccc 25%, transparent 25%), -webkit-linear-gradient(-45deg, #ccc 25%, transparent 25%), -webkit-linear-gradient(45deg, transparent 75%, #ccc 75%), -webkit-linear-gradient(-45deg, transparent 75%, #ccc 75%);
+  background-image: -moz-linear-gradient(45deg, #ccc 25%, transparent 25%), -moz-linear-gradient(-45deg, #ccc 25%, transparent 25%), -moz-linear-gradient(45deg, transparent 75%, #ccc 75%), -moz-linear-gradient(-45deg, transparent 75%, #ccc 75%);
+  background-image: -ms-linear-gradient(45deg, #ccc 25%, transparent 25%), -ms-linear-gradient(-45deg, #ccc 25%, transparent 25%), -ms-linear-gradient(45deg, transparent 75%, #ccc 75%), -ms-linear-gradient(-45deg, transparent 75%, #ccc 75%);
+  background-image: linear-gradient(45deg, #ccc 25%, transparent 25%), linear-gradient(-45deg, #ccc 25%, transparent 25%), linear-gradient(45deg, transparent 75%, #ccc 75%), linear-gradient(-45deg, transparent 75%, #ccc 75%);
+  background-size: 8px 8px;
+  background-position: 0 0, 0 4px, 4px -4px, -4px 0px;
+  position: relative;
+  border-radius: 3px;
+}
+ng-chroma .main-button-preview {
+  width: 20px;
+  height: 20px;
+  display: block;
+  vertical-align: middle;
+  position: absolute;
+  border: 1px solid #ccc;
+  left: 0;
+  top: 0;
+  border-radius: 3px;
+}
+ng-chroma .main-button-caret {
+  width: 0;
+  height: 0;
+  border-style: solid;
+  border-width: 6.9px 4px 0 4px;
+  border-color: #ccc transparent transparent transparent;
+  display: inline-block;
+  vertical-align: middle;
+}
+ng-chroma .main-button:hover .main-button-caret,
+ng-chroma .main-button.isActive .main-button-caret {
+  border-color: #8c8c8c transparent transparent transparent;
+}
+ng-chroma .user-color {
+  width: 26px;
+  height: 26px;
+  padding: 3px;
+  border: 1px solid #ccc;
+  border-radius: 4px;
+  background-color: white;
+  margin: 0 3px 3px 0;
+  overflow: hidden;
+  cursor: pointer;
+}
+ng-chroma .user-color-container {
+  display: flex;
+  flex-wrap: wrap;
+  justify-content: flex-start;
+}
+ng-chroma .user-color-preview {
+  width: 18px;
+  height: 18px;
+  display: inline-block;
+  vertical-align: middle;
+  background-color: white;
+  transition: transform 0.12s linear;
+  vertical-align: baseline;
+}
+ng-chroma .user-color-label {
+  font-size: 12px;
+  font-weight: bold;
+  margin-bottom: 8px;
+}
+ng-chroma .user-color:active {
+  filter: brightness(0.75);
+}
+ng-chroma .user-color:hover .user-color-preview {
+  transform: scale(1.3);
+}
+ng-chroma .color-picker-selector {
+  z-index: 100;
+  display: none;
+  position: absolute;
+  left: 0;
+  top: calc(100% + 6px);
+  background-color: white;
+  width: 260px;
+  padding: 10px;
+  border-radius: 4px;
+  border: 1px solid #ccc;
+}
+ng-chroma .color-picker-selector.isShown {
+  display: block;
+}
+ng-chroma .picker-cmyk {
+  display: flex;
+}
+ng-chroma .picker-cmyk-input {
+  border: 1px solid #ccc;
+  margin-right: 4px;
+  border-radius: 4px;
+  flex: 1;
+  display: flex;
+}
+ng-chroma .picker-cmyk-input:last-child {
+  margin-right: 0;
+}
+ng-chroma .picker-cmyk-input span {
+  line-height: 26px;
+  width: 16px;
+  text-align: center;
+  font-size: 12px;
+  font-weight: bold;
+}
+ng-chroma .picker-cmyk-input input {
+  display: inline-block;
+  flex: 1 0;
+  width: 20px;
+  border: 0;
+}
+ng-chroma .hsl-selector-lightness-saturation {
+  position: relative;
+  width: 240px;
+  height: 100px;
+}
+ng-chroma .hsl-selector-saturation,
+ng-chroma .hsl-selector-lightness {
+  width: 240px;
+  height: 100px;
+  position: absolute;
+  left: 0;
+  top: 0;
+}
+ng-chroma .hsl-selector-saturation {
+  background-image: linear-gradient(to right, black, rgba(204, 154, 129, 0));
+  cursor: crosshair;
+}
+ng-chroma .hsl-selector-saturation-handle {
+  position: absolute;
+  pointer-events: none;
+  z-index: 100;
+  width: 14px;
+  height: 14px;
+  margin-left: -7px;
+  margin-top: -7px;
+  border: 1px solid #fff;
+  border-radius: 50%;
+  box-shadow: 0 0 12px 0 rgba(0, 0, 0, 0.44);
+  cursor: crosshair;
+}
+ng-chroma .hsl-selector-lightness {
+  background-image: linear-gradient(to top, white, rgba(204, 154, 129, 0));
+}
+ng-chroma .hsl-selector-hue {
+  width: 240px;
+  height: 20px;
+  position: relative;
+  cursor: pointer;
+  background-image: linear-gradient(to left, red, #f503ff 16%, #1f00ff 33%, #00d6ff 51%, #03ff4a 67%, #f5ff00 84%, red);
+}
+ng-chroma .hsl-selector-hue-handle {
+  pointer-events: none;
+  position: absolute;
+  top: 0;
+  height: 100%;
+  width: 1px;
+  margin-left: -1px;
+}
+ng-chroma .hsl-selector-hue-handle::before {
+  width: 0;
+  height: 0;
+  border-style: solid;
+  border-width: 0 4px 6.9px 4px;
+  border-color: transparent transparent #000000 transparent;
+  content: '';
+  display: block;
+  position: absolute;
+  bottom: -7px;
+  left: -3px;
+}
+ng-chroma .hsl-selector-hue-handle::after {
+  width: 0;
+  height: 0;
+  border-style: solid;
+  border-width: 6.9px 4px 0 4px;
+  border-color: #000000 transparent transparent transparent;
+  content: '';
+  display: block;
+  position: absolute;
+  top: -7px;
+  left: -3px;
+}
+ng-chroma .alpha-selector-track {
+  width: 240px;
+  height: 20px;
+  position: relative;
+  background-image: -webkit-linear-gradient(45deg, #ccc 25%, transparent 25%), -webkit-linear-gradient(-45deg, #ccc 25%, transparent 25%), -webkit-linear-gradient(45deg, transparent 75%, #ccc 75%), -webkit-linear-gradient(-45deg, transparent 75%, #ccc 75%);
+  background-image: -moz-linear-gradient(45deg, #ccc 25%, transparent 25%), -moz-linear-gradient(-45deg, #ccc 25%, transparent 25%), -moz-linear-gradient(45deg, transparent 75%, #ccc 75%), -moz-linear-gradient(-45deg, transparent 75%, #ccc 75%);
+  background-image: -ms-linear-gradient(45deg, #ccc 25%, transparent 25%), -ms-linear-gradient(-45deg, #ccc 25%, transparent 25%), -ms-linear-gradient(45deg, transparent 75%, #ccc 75%), -ms-linear-gradient(-45deg, transparent 75%, #ccc 75%);
+  background-image: linear-gradient(45deg, #ccc 25%, transparent 25%), linear-gradient(-45deg, #ccc 25%, transparent 25%), linear-gradient(45deg, transparent 75%, #ccc 75%), linear-gradient(-45deg, transparent 75%, #ccc 75%);
+  background-size: 8px 8px;
+  background-position: 0 0, 0 4px, 4px -4px, -4px 0px;
+}
+ng-chroma .alpha-selector-overlay {
+  background-image: linear-gradient(to right, rgba(0, 0, 0, 0), #000000);
+  position: absolute;
+  left: 0;
+  top: 0;
+  right: 0;
+  bottom: 0;
+  cursor: pointer;
+}
+ng-chroma .alpha-selector-handle {
+  pointer-events: none;
+  position: absolute;
+  top: 0;
+  height: 100%;
+  width: 1px;
+  margin-left: -1px;
+}
+ng-chroma .alpha-selector-handle::before {
+  width: 0;
+  height: 0;
+  border-style: solid;
+  border-width: 0 4px 6.9px 4px;
+  border-color: transparent transparent #000000 transparent;
+  content: '';
+  display: block;
+  position: absolute;
+  bottom: -7px;
+  left: -3px;
+}
+ng-chroma .alpha-selector-handle::after {
+  width: 0;
+  height: 0;
+  border-style: solid;
+  border-width: 6.9px 4px 0 4px;
+  border-color: #000000 transparent transparent transparent;
+  content: '';
+  display: block;
+  position: absolute;
+  top: -7px;
+  left: -3px;
+}

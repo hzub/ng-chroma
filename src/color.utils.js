@@ -1,17 +1,34 @@
 export class ColorUtils {
-  static rgbToHtml(rgb) {
-    return `rgb(${rgb[0]},${rgb[1]},${rgb[2]})`;
+
+  static createGradient(direction, start, end, prefix = '') {
+    return `${prefix}linear-gradient(${direction},
+      rgba(${start[0]},${start[1]}, ${start[2]}, ${start[3]}),
+      rgba(${end[0]}, ${end[1]}, ${end[2]}, ${end[3]}))`;
   }
 
-  static rgbToHexHtml(rgb) {
+  static rgbaToHtml(rgba) {
+    if ((typeof rgba[3] === 'number') && rgba[3] < 1.0) {
+      return ColorUtils.rgbaToRgbaHtml(rgba);
+    }
+
+    return ColorUtils.rgbaToHexHtml(rgba);
+  }
+
+  static rgbaToRgbaHtml(rgba) {
+    let alpha = typeof rgba[3] === 'number' ? rgba[3] : 1;
+    alpha = alpha.toString().substr(0, 4);
+    return `rgba(${rgba[0]},${rgba[1]},${rgba[2]},${alpha})`;
+  }
+
+  static rgbaToHexHtml(rgba) {
     let ret = '#';
-    ret += (`0${parseInt(rgb[0], 10).toString(16)}`).slice(-2);
-    ret += (`0${parseInt(rgb[1], 10).toString(16)}`).slice(-2);
-    ret += (`0${parseInt(rgb[2], 10).toString(16)}`).slice(-2);
+    ret += (`0${parseInt(rgba[0], 10).toString(16)}`).slice(-2);
+    ret += (`0${parseInt(rgba[1], 10).toString(16)}`).slice(-2);
+    ret += (`0${parseInt(rgba[2], 10).toString(16)}`).slice(-2);
     return ret;
   }
 
-  static hsbToRgb(hsv) {
+  static hsbToRgba(hsv) {
     const [h, s, v] = hsv;
 
     let r;
@@ -62,11 +79,12 @@ export class ColorUtils {
       Math.round(r * 255),
       Math.round(g * 255),
       Math.round(b * 255),
+      1,
     ];
   }
 
-  static rgbToHsb(rgb) {
-    const [r, g, b] = rgb;
+  static rgbaToHsb(rgba) {
+    const [r, g, b] = rgba;
 
     const max = Math.max(r, g, b);
     const min = Math.min(r, g, b);
@@ -103,13 +121,16 @@ export class ColorUtils {
     ];
   }
 
-  static htmlColorToRgb(input) {
-    const rgbResult = /rgb\([^\d]*(\d+)[^\d]+(\d+)[^\d]+(\d+)[^\d]*\)/i.exec(input);
-    if (rgbResult) {
+  static htmlColorToRgba(input) {
+    const rgbaResult = /^rgba?[\s]?\(\s*(\d+)\s*\,\s*(\d+)\s*,\s*(\d+)\s*,?\s*([\d\.]+)?/i
+      .exec(input);
+
+    if (rgbaResult) {
       return [
-        parseInt(rgbResult[1], 10),
-        parseInt(rgbResult[2], 10),
-        parseInt(rgbResult[3], 10),
+        parseInt(rgbaResult[1], 10),
+        parseInt(rgbaResult[2], 10),
+        parseInt(rgbaResult[3], 10),
+        parseFloat(rgbaResult[4], 10) || 1,
       ];
     }
 
@@ -119,21 +140,22 @@ export class ColorUtils {
         parseInt(hexResult[1], 16),
         parseInt(hexResult[2], 16),
         parseInt(hexResult[3], 16),
+        1,
       ];
     }
 
     return null;
   }
 
-  static rgbToCmyk(rgb) {
+  static rgbaToCmyk(rgba) {
     let c;
     let m;
     let y;
     let k;
 
-    const r = rgb[0] / 255;
-    const g = rgb[1] / 255;
-    const b = rgb[2] / 255;
+    const r = rgba[0] / 255;
+    const g = rgba[1] / 255;
+    const b = rgba[2] / 255;
 
     k = Math.min(1 - r, 1 - g, 1 - b);
     c = (1 - r - k) / (1 - k);
@@ -148,7 +170,7 @@ export class ColorUtils {
     return [c, m, y, k];
   }
 
-  static cmykToRgb(cmyk) {
+  static cmykToRgba(cmyk) {
     let r;
     let g;
     let b;
@@ -168,6 +190,6 @@ export class ColorUtils {
     g = Math.round(g * 255);
     b = Math.round(b * 255);
 
-    return [r, g, b];
+    return [r, g, b, 1];
   }
 }

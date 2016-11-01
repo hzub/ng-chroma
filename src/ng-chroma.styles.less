@@ -1,59 +1,118 @@
+@border-color: #ccc;
 ng-chroma {
     position: relative;
+    font-size: 10px;
+    font-family: sans-serif;
+    &,
+    * {
+        box-sizing: border-box;
+    }
     .color-picker {
         display: inline-block;
     }
     .separator {
         height: 1px;
-        margin-top: 15px;
-        margin-bottom: 15px;
-        border-bottom: 1px dashed #ddd;
+        margin-top: 10px;
+        margin-bottom: 10px;
+        border-bottom: 1px dashed @border-color;
     }
     .margin {
         margin-bottom: 15px;
     }
-    .button-color-preview {
-        width: 20px;
-        height: 20px;
-        display: inline-block;
-        vertical-align: middle;
-        background-color: white;
-        transition: transform 0.2s linear;
-    }
-    .button-caret {
-        color: #aaa;
-    }
-    .color-container {
-        display: flex;
-        flex-wrap: wrap;
-        justify-content: flex-start;
-        .button-color-preview {
-            vertical-align: baseline;
+    .selected-color {
+        font-size: 12px;
+        &-value {
+            font-weight: bold;
         }
     }
-    .button-color {
+    .main-button {
+        padding: 4px;
+        border: 1px solid @border-color;
+        border-radius: 4px;
+        background-color: white;
+        cursor: pointer;
+        &-background {
+            width: 20px;
+            height: 20px;
+            display: inline-block;
+            vertical-align: middle;
+            background-image: -webkit-linear-gradient(45deg, @border-color 25%, transparent 25%), -webkit-linear-gradient(-45deg, @border-color 25%, transparent 25%), -webkit-linear-gradient(45deg, transparent 75%, @border-color 75%), -webkit-linear-gradient(-45deg, transparent 75%, @border-color 75%);
+            background-image: -moz-linear-gradient(45deg, @border-color 25%, transparent 25%), -moz-linear-gradient(-45deg, @border-color 25%, transparent 25%), -moz-linear-gradient(45deg, transparent 75%, @border-color 75%), -moz-linear-gradient(-45deg, transparent 75%, @border-color 75%);
+            background-image: -ms-linear-gradient(45deg, @border-color 25%, transparent 25%), -ms-linear-gradient(-45deg, @border-color 25%, transparent 25%), -ms-linear-gradient(45deg, transparent 75%, @border-color 75%), -ms-linear-gradient(-45deg, transparent 75%, @border-color 75%);
+            background-image: linear-gradient(45deg, @border-color 25%, transparent 25%), linear-gradient(-45deg, @border-color 25%, transparent 25%), linear-gradient(45deg, transparent 75%, @border-color 75%), linear-gradient(-45deg, transparent 75%, @border-color 75%);
+            background-size: 8px 8px;
+            background-position: 0 0, 0 4px, 4px -4px, -4px 0px;
+            position: relative;
+            border-radius: 3px;
+        }
+        &-preview {
+            width: 20px;
+            height: 20px;
+            display: block;
+            vertical-align: middle;
+            position: absolute;
+            border: 1px solid @border-color;
+            left: 0;
+            top: 0;
+            border-radius: 3px;
+        }
+        &-caret {
+            width: 0;
+            height: 0;
+            border-style: solid;
+            border-width: 6.9px 4px 0 4px;
+            border-color: @border-color transparent transparent transparent;
+            display: inline-block;
+            vertical-align: middle;
+        }
+        &:hover,
+        &.isActive {
+            .main-button-caret {
+                border-color: darken(@border-color, 25%) transparent transparent transparent;
+            }
+        }
+    }
+    .user-color {
+        &-container {
+            display: flex;
+            flex-wrap: wrap;
+            justify-content: flex-start;
+        }
+
         width: 26px;
         height: 26px;
-        padding: 2px;
-        border: 1px solid #ccc;
+        padding: 3px;
+        border: 1px solid @border-color;
         border-radius: 4px;
         background-color: white;
         margin: 0 3px 3px 0;
         overflow: hidden;
+        cursor: pointer;
+
+        &-preview {
+            width: 18px;
+            height: 18px;
+            display: inline-block;
+            vertical-align: middle;
+            background-color: white;
+            transition: transform 0.12s linear;
+            vertical-align: baseline;
+        }
+
+        &-label {
+            font-size: 12px;
+            font-weight: bold;
+            margin-bottom: 8px;
+        }
+
         &:active {
             filter: brightness(0.75);
         }
         &:hover {
-            .button-color-preview {
+            .user-color-preview {
                 transform: scale(1.3);
             }
         }
-    }
-    .color-picker-button {
-        padding: 4px;
-        border: 1px solid #ccc;
-        border-radius: 4px;
-        background-color: white;
     }
     .color-picker-selector {
         z-index: 100;
@@ -65,15 +124,15 @@ ng-chroma {
         width: 260px;
         padding: 10px;
         border-radius: 4px;
-        border: 1px solid #ccc;
+        border: 1px solid @border-color;
         &.isShown {
             display: block;
         }
     }
     .picker-cmyk {
         display: flex;
-        &__input {
-            border: 1px solid #ddd;
+        &-input {
+            border: 1px solid @border-color;
             margin-right: 4px;
             border-radius: 4px;
             flex: 1;
@@ -96,22 +155,23 @@ ng-chroma {
             }
         }
     }
-    .select-color {
-        &__lightness-saturation {
+    .hsl-selector {
+        &-lightness-saturation {
             position: relative;
             width: 240px;
             height: 100px;
         }
-        &__saturation,
-        &__lightness {
+        &-saturation,
+        &-lightness {
             width: 240px;
             height: 100px;
             position: absolute;
             left: 0;
             top: 0;
         }
-        &__saturation {
+        &-saturation {
             background-image: linear-gradient(to right, black, rgba(204, 154, 129, 0));
+            cursor: crosshair;
             &-handle {
                 position: absolute;
                 pointer-events: none;
@@ -126,13 +186,14 @@ ng-chroma {
                 cursor: crosshair;
             }
         }
-        &__lightness {
+        &-lightness {
             background-image: linear-gradient(to top, white, rgba(204, 154, 129, 0));
         }
-        &__hue {
+        &-hue {
             width: 240px;
             height: 20px;
             position: relative;
+            cursor: pointer;
             background-image: linear-gradient(to left, red, #f503ff 16%, #1f00ff 33%, #00d6ff 51%, #03ff4a 67%, #f5ff00 84%, red);
             &-handle {
                 pointer-events: none;
@@ -165,6 +226,60 @@ ng-chroma {
                     top: -7px;
                     left: -3px;
                 }
+            }
+        }
+    }
+    .alpha-selector {
+        &-track {
+            width: 240px;
+            height: 20px;
+            position: relative;
+            background-image: -webkit-linear-gradient(45deg, @border-color 25%, transparent 25%), -webkit-linear-gradient(-45deg, @border-color 25%, transparent 25%), -webkit-linear-gradient(45deg, transparent 75%, @border-color 75%), -webkit-linear-gradient(-45deg, transparent 75%, @border-color 75%);
+            background-image: -moz-linear-gradient(45deg, @border-color 25%, transparent 25%), -moz-linear-gradient(-45deg, @border-color 25%, transparent 25%), -moz-linear-gradient(45deg, transparent 75%, @border-color 75%), -moz-linear-gradient(-45deg, transparent 75%, @border-color 75%);
+            background-image: -ms-linear-gradient(45deg, @border-color 25%, transparent 25%), -ms-linear-gradient(-45deg, @border-color 25%, transparent 25%), -ms-linear-gradient(45deg, transparent 75%, @border-color 75%), -ms-linear-gradient(-45deg, transparent 75%, @border-color 75%);
+            background-image: linear-gradient(45deg, @border-color 25%, transparent 25%), linear-gradient(-45deg, @border-color 25%, transparent 25%), linear-gradient(45deg, transparent 75%, @border-color 75%), linear-gradient(-45deg, transparent 75%, @border-color 75%);
+            background-size: 8px 8px;
+            background-position: 0 0, 0 4px, 4px -4px, -4px 0px;
+        }
+        &-overlay {
+            background-image: linear-gradient(to right, rgba(0, 0, 0, 0), rgba(0, 0, 0, 1));
+            position: absolute;
+            left: 0;
+            top: 0;
+            right: 0;
+            bottom: 0;
+            cursor: pointer;
+        }
+        &-handle {
+            pointer-events: none;
+            position: absolute;
+            top: 0;
+            height: 100%;
+            width: 1px;
+            margin-left: -1px;
+            &::before {
+                width: 0;
+                height: 0;
+                border-style: solid;
+                border-width: 0 4px 6.9px 4px;
+                border-color: transparent transparent #000000 transparent;
+                content: '';
+                display: block;
+                position: absolute;
+                bottom: -7px;
+                left: -3px;
+            }
+            &::after {
+                width: 0;
+                height: 0;
+                border-style: solid;
+                border-width: 6.9px 4px 0 4px;
+                border-color: #000000 transparent transparent transparent;
+                content: '';
+                display: block;
+                position: absolute;
+                top: -7px;
+                left: -3px;
             }
         }
     }

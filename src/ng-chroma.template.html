@@ -1,54 +1,63 @@
 <div class="color-picker" click-outside="$ctrl.hidePopup()">
-    <button ng-click="$ctrl.togglePopup()" class="color-picker-button">
-        <div class="button-color-preview" style="background-color: {{$ctrl.ngModel.$viewValue}}"></div>
-        <i class="fa fa-caret-down button-caret"></i>
+    <button ng-click="$ctrl.togglePopup()" class="main-button" ng-class="{'isActive': $ctrl.popupShown}">
+        <div class="main-button-background">
+            <div class="main-button-preview" style="background-color: {{$ctrl.ngModel.$viewValue}}"></div>
+        </div>
+        <i class="main-button-caret"></i>
     </button>
     <div class="color-picker-selector js-selector" ng-class="{'isShown': $ctrl.popupShown}" ng-if="$ctrl.popupShown" ng-init="$ctrl.onPopupShown()">
-        <div class="color-container">
-            <button ng-click="$ctrl.selectColorAndHide(stdColor)" ng-repeat="stdColor in ::($ctrl.standardColors) track by $index" class="button-color">
-                <div class="button-color-preview" style="background-color: {{stdColor}}"></div>
+        <div class="user-color-label" ng-bind="::($ctrl.customColorsLabel)" ng-if="::($ctrl.customColorsLabel)"></div>
+        <div class="user-color-container" ng-if="::($ctrl.customColors)">
+            <button ng-click="$ctrl.selectColorAndHide(stdColor)" ng-repeat="stdColor in ::($ctrl.customColors) track by $index" class="user-color">
+                <div class="user-color-preview" style="background-color: {{::stdColor}}"></div>
             </button>
         </div>
-        <div class="separator"></div>
-        <div class="color-container">
-            <button ng-click="$ctrl.selectColorAndHide(userColor)" ng-repeat="userColor in ::($ctrl.userColors) track by $index" class="button-color">
-                <div class="button-color-preview" style="background-color: {{userColor}}"></div>
-            </button>
-        </div>
-        <div class="separator"></div>
-        <div class="select-color__container">
-            <div class="select-color__lightness-saturation js-lightness-saturation">
-                <div class="select-color__lightness">
+        <div class="separator" ng-if="::($ctrl.customColors)"></div>
+        <div class="hsl-selector-container">
+            <div class="hsl-selector-lightness-saturation js-lightness-saturation">
+                <div class="hsl-selector-lightness">
                 </div>
-                <div class="select-color__saturation js-hsl-container">
-                    <div class="select-color__saturation-handle js-hsl-handle"></div>
+                <div class="hsl-selector-saturation js-hsl-container">
+                    <div class="hsl-selector-saturation-handle js-hsl-handle"></div>
                 </div>
             </div>
             <div class="margin"></div>
-            <div class="select-color__hue js-hue-container">
-                <div class="select-color__hue-handle js-hue-handle"></div>
+            <div class="hsl-selector-hue js-hue-container">
+                <div class="hsl-selector-hue-handle js-hue-handle"></div>
             </div>
         </div>
         <div class="margin"></div>
-        <div class="picker-cmyk">
-            <div class="picker-cmyk__input">
-                <span>C:</span>
-                <input min="0" max="100" type="number" ng-model="$ctrl.cmykC" ng-change="$ctrl.cmykChanged()" />
-            </div>
-            <div class="picker-cmyk__input">
-                <span>M:</span>
-                <input min="0" max="100" type="number" ng-model="$ctrl.cmykM" ng-change="$ctrl.cmykChanged()" />
-            </div>
-            <div class="picker-cmyk__input">
-                <span>Y:</span>
-                <input min="0" max="100" type="number" ng-model="$ctrl.cmykY" ng-change="$ctrl.cmykChanged()" />
-            </div>
-            <div class="picker-cmyk__input">
-                <span>K:</span>
-                <input min="0" max="100" type="number" ng-model="$ctrl.cmykK" ng-change="$ctrl.cmykChanged()" />
+        <div class="alpha-selector" ng-show="::($ctrl.showAlpha)">
+            <div class="alpha-selector-track js-alpha-container">
+                <div class="alpha-selector-overlay js-alpha-overlay">
+                </div>
+                <div class="alpha-selector-handle js-alpha-handle"></div>
             </div>
         </div>
-        <div class="margin"></div>
-        Selected color: {{$ctrl.selectedColorString}}
+        <div class="picker-cmyk-container" ng-if="::($ctrl.showCmykColors)">
+            <div class="margin"></div>
+            <div class="picker-cmyk">
+                <div class="picker-cmyk-input">
+                    <span>C:</span>
+                    <input min="0" max="100" type="number" ng-model="$ctrl.cmykC" ng-change="$ctrl.cmykChanged()" />
+                </div>
+                <div class="picker-cmyk-input">
+                    <span>M:</span>
+                    <input min="0" max="100" type="number" ng-model="$ctrl.cmykM" ng-change="$ctrl.cmykChanged()" />
+                </div>
+                <div class="picker-cmyk-input">
+                    <span>Y:</span>
+                    <input min="0" max="100" type="number" ng-model="$ctrl.cmykY" ng-change="$ctrl.cmykChanged()" />
+                </div>
+                <div class="picker-cmyk-input">
+                    <span>K:</span>
+                    <input min="0" max="100" type="number" ng-model="$ctrl.cmykK" ng-change="$ctrl.cmykChanged()" />
+                </div>
+            </div>
+        </div>
+        <div class="selected-color" ng-show="::($ctrl.showSelectedValue)">
+            <div class="margin"></div>
+            <span class="selected-color-label">Selected color:</span> <span class="selected-color-value">{{$ctrl.selectedColorString}}</span>
+        </div>
     </div>
 </div>

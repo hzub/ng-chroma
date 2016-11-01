@@ -1,13 +1,8 @@
-import $ from 'jquery';
-import _ from 'lodash';
+import _throttle from 'lodash.throttle';
 
 import './ng-chroma.styles.less';
 
 import { ColorUtils } from './color.utils';
-
-// import { STANDARD_COLORS } from './standard-colors.constant.js';
-
-const STANDARD_COLORS = [];
 
 export class ColorPickerComponent {
   static NAME = 'ngChroma';
@@ -19,29 +14,33 @@ export class ColorPickerComponent {
     },
     bindings: {
       ngChange: '&ngChange',
+      customColors: '<',
+      customColorsLabel: '@',
     },
   };
 
-  constructor($scope, $element) {
+  constructor($scope, $element, $attrs) {
     'ngInject';
+
     Object.assign(this, {
       $scope,
       $element,
+      $attrs,
     });
-    this.standardColors = STANDARD_COLORS;
 
-    // TODO: Remove this filthy mock!
-    this.userColors = [
-      '#ff0000',
-      '#0000ff',
-    ];
-
-    this.selectColor = _.throttle(this._selectColor, 50);
+    this.selectColor = _throttle(this._selectColor, 50);
 
     this.hueMouseDown_bound = this.hueMouseDown.bind(this);
+    this.alphaMouseDown_bound = this.alphaMouseDown.bind(this);
     this.hslMouseDown_bound = this.hslMouseDown.bind(this);
     this.bodyMouseMove_bound = this.bodyMouseMove.bind(this);
     this.bodyMouseUp_bound = this.bodyMouseUp.bind(this);
+  }
+
+  $onInit() {
+    this.showCmykColors = typeof this.$attrs.cmykColors !== 'undefined';
+    this.showAlpha = typeof this.$attrs.alphaColors !== 'undefined';
+    this.showSelectedValue = typeof this.$attrs.showSelectedValue !== 'undefined';
   }
 
   $onDestroy() {
@@ -53,79 +52,113 @@ export class ColorPickerComponent {
       return;
     }
 
-    this.domRefs.hueContainer.off('mousedown', this.hueMouseDown_bound);
-    this.domRefs.hslContainer.off('mousedown', this.hslMouseDown_bound);
-    this.domRefs.body.off('mousemove', this.bodyMouseMove_bound);
-    this.domRefs.body.off('mouseup', this.bodyMouseUp_bound);
+    this.domRefs.alphaContainer.removeEventListener('mousedown', this.alphaMouseDown_bound);
+    this.domRefs.hueContainer.removeEventListener('mousedown', this.hueMouseDown_bound);
+    this.domRefs.hslContainer.removeEventListener('mousedown', this.hslMouseDown_bound);
+    this.domRefs.body.removeEventListener('mousemove', this.bodyMouseMove_bound);
+    this.domRefs.body.removeEventListener('mouseup', this.bodyMouseUp_bound);
 
     this.domRefs = null;
   }
 
   setHue(hue) {
     this.selectedHue = hue;
-    const htmlHue = ColorUtils.rgbToHtml(ColorUtils.hsbToRgb([hue, 1, 1]));
-    this.domRefs.lightnesshslContainer.css('backgroundColor', htmlHue);
-    this.domRefs.hueHandle.css('left', `${(hue * 100)}%`);
+    const htmlHue = ColorUtils.rgbaToHtml(ColorUtils.hsbToRgba([hue, 1, 1]));
+    this.domRefs.lightnessHslContainer.style.backgroundColor = htmlHue;
+    this.domRefs.hueHandle.style.left = `${(hue * 100)}%`;
+  }
+
+  setAlpha(alpha) {
+    this.selectedAlpha = alpha;
+    this.domRefs.alphaHandle.style.left = `${(alpha * 100)}%`;
   }
 
   setLightnessSaturation(lightness, saturation) {
     this.selectedSaturation = saturation;
     this.selectedLightness = lightness;
-    this.domRefs.hslHandle.css('left', `${(lightness * 100)}%`);
-    this.domRefs.hslHandle.css('top', `${((1 - saturation) * 100)}%`);
+    this.domRefs.hslHandle.style.left = `${(lightness * 100)}%`;
+    this.domRefs.hslHandle.style.top = `${((1 - saturation) * 100)}%`;
   }
 
   selectColorFromHsl() {
-    const rgbColor = ColorUtils.hsbToRgb([
+    const rgbColor = ColorUtils.hsbToRgba([
       this.selectedHue,
       this.selectedSaturation,
       this.selectedLightness,
     ]);
 
-    this.selectColor(ColorUtils.rgbToHtml(rgbColor));
+    this.setAlphaOverlay(rgbColor);
+
+    rgbColor[3] = this.selectedAlpha;
+
+    this.selectColor(ColorUtils.rgbaToHtml(rgbColor));
+  }
+
+  setAlphaOverlay(rgb) {
+    this.domRefs.alphaOverlay.style.background =
+      ColorUtils.createGradient('to right', [0, 0, 0, 0], [rgb[0], rgb[1], rgb[2], 1], '-webkit-');
+    this.domRefs.alphaOverlay.style.background =
+      ColorUtils.createGradient('to right', [0, 0, 0, 0], [rgb[0], rgb[1], rgb[2], 1], '-moz-');
+    this.domRefs.alphaOverlay.style.background =
+      ColorUtils.createGradient('to right', [0, 0, 0, 0], [rgb[0], rgb[1], rgb[2], 1], '-ms-');
+    this.domRefs.alphaOverlay.style.background =
+      ColorUtils.createGradient('to right', [0, 0, 0, 0], [rgb[0], rgb[1], rgb[2], 1]);
   }
 
   refreshSelectedCmykColor() {
-    const rgbColor = ColorUtils.hsbToRgb([
+    const rgbColor = ColorUtils.hsbToRgba([
       this.selectedHue,
       this.selectedSaturation,
       this.selectedLightness,
     ]);
 
-    this.setCmyk(ColorUtils.rgbToCmyk(rgbColor));
+    this.setCmyk(ColorUtils.rgbaToCmyk(rgbColor));
   }
 
-  selectHueFromEvent(e) {
-    if (this.selectingHue) {
-      let offset = e.pageX - this.selectingHue[0];
-      offset = Math.min(offset, this.domRefs.hueContainer.width());
+  selectAlphaFromEvent(e) {
+    if (this.selectingAlpha) {
+      let offset = e.pageX - this.selectingAlpha[0];
+
+      offset = Math.min(offset, this.domRefs.alphaContainer.clientWidth);
       offset = Math.max(offset, 0);
 
-      this.setHue(offset / this.domRefs.hueContainer.width());
+      this.setAlpha(offset / this.domRefs.alphaContainer.clientWidth);
       this.selectColorFromHsl();
       this.refreshSelectedCmykColor();
     }
   }
 
-  blockPageSelecting(block) {
-    const body = $('body');
+  selectHueFromEvent(e) {
+    if (this.selectingHue) {
+      let offset = e.pageX - this.selectingHue[0];
+      offset = Math.min(offset, this.domRefs.hueContainer.clientWidth);
+      offset = Math.max(offset, 0);
+
+      this.setHue(offset / this.domRefs.hueContainer.clientWidth);
+      this.selectColorFromHsl();
+      this.refreshSelectedCmykColor();
+    }
+  }
+
+  static blockPageSelecting(block) {
+    const body = document.body;
     const value = block ? 'none' : '';
 
-    body.css('-webkit-user-select', value);
-    body.css('-khtml-user-select', value);
-    body.css('-moz-user-select', value);
-    body.css('-ms-user-select', value);
-    body.css('user-select', value);
+    body.style.webkitUserSelect = value;
+    body.style.khtmlUserSelect = value;
+    body.style.mozUserSelect = value;
+    body.style.msUserSelect = value;
+    body.style.userSelect = value;
   }
 
   selectSaturationFromEvent(e) {
     if (this.selectingSaturation) {
       let offsetX = e.pageX - this.selectingSaturation[0];
       let offsetY = e.pageY - this.selectingSaturation[1];
-      offsetX = Math.min(Math.max(offsetX, 0), this.domRefs.hslContainer.width());
-      offsetY = Math.min(Math.max(offsetY, 0), this.domRefs.hslContainer.height());
-      const saturation = 1.0 - (offsetY / this.domRefs.hslContainer.height());
-      const lightness = offsetX / this.domRefs.hslContainer.width();
+      offsetX = Math.min(Math.max(offsetX, 0), this.domRefs.hslContainer.clientWidth);
+      offsetY = Math.min(Math.max(offsetY, 0), this.domRefs.hslContainer.clientHeight);
+      const saturation = 1.0 - (offsetY / this.domRefs.hslContainer.clientHeight);
+      const lightness = offsetX / this.domRefs.hslContainer.clientWidth;
 
       this.setLightnessSaturation(lightness, saturation);
       this.selectColorFromHsl();
@@ -134,45 +167,59 @@ export class ColorPickerComponent {
   }
 
   hueMouseDown(e) {
-    this.selectingHue = [this.domRefs.hueContainer.offset().left];
+    this.selectingHue = [this.domRefs.hueContainer.getBoundingClientRect().left];
     this.selectHueFromEvent(e);
-    this.blockPageSelecting(true);
+    ColorPickerComponent.blockPageSelecting(true);
+  }
+
+  alphaMouseDown(e) {
+    this.selectingAlpha = [this.domRefs.alphaContainer.getBoundingClientRect().left];
+    this.selectAlphaFromEvent(e);
+    ColorPickerComponent.blockPageSelecting(true);
   }
 
   hslMouseDown(e) {
     this.selectingSaturation = [
-      this.domRefs.hslContainer.offset().left,
-      this.domRefs.hslContainer.offset().top,
+      this.domRefs.hslContainer.getBoundingClientRect().left,
+      this.domRefs.hslContainer.getBoundingClientRect().top,
     ];
     this.selectSaturationFromEvent(e);
-    this.blockPageSelecting(true);
+    ColorPickerComponent.blockPageSelecting(true);
   }
 
   bodyMouseMove(e) {
     this.selectHueFromEvent(e);
     this.selectSaturationFromEvent(e);
+    this.selectAlphaFromEvent(e);
   }
 
   bodyMouseUp() {
     this.selectingSaturation = null;
     this.selectingHue = null;
-    this.blockPageSelecting(false);
+    this.selectingAlpha = null;
+    ColorPickerComponent.blockPageSelecting(false);
   }
 
   attachEventListeners() {
     this.domRefs = {
-      body: $('body'),
-      hueContainer: $(this.$element).find('.js-hue-container'),
-      lightnesshslContainer: $(this.$element).find('.js-lightness-saturation'),
-      hslContainer: $(this.$element).find('.js-hsl-container'),
-      hslHandle: $(this.$element).find('.js-hsl-handle'),
-      hueHandle: $(this.$element).find('.js-hue-handle'),
+      body: document.body,
+      lightnessHslContainer: this.$element[0].querySelector('.js-lightness-saturation'),
+      hslContainer: this.$element[0].querySelector('.js-hsl-container'),
+      hslHandle: this.$element[0].querySelector('.js-hsl-handle'),
+
+      hueContainer: this.$element[0].querySelector('.js-hue-container'),
+      hueHandle: this.$element[0].querySelector('.js-hue-handle'),
+
+      alphaContainer: this.$element[0].querySelector('.js-alpha-container'),
+      alphaHandle: this.$element[0].querySelector('.js-alpha-handle'),
+      alphaOverlay: this.$element[0].querySelector('.js-alpha-overlay'),
     };
 
-    this.domRefs.hueContainer.on('mousedown', this.hueMouseDown_bound);
-    this.domRefs.hslContainer.on('mousedown', this.hslMouseDown_bound);
-    this.domRefs.body.on('mousemove', this.bodyMouseMove_bound);
-    this.domRefs.body.on('mouseup', this.bodyMouseUp_bound);
+    this.domRefs.alphaContainer.addEventListener('mousedown', this.alphaMouseDown_bound);
+    this.domRefs.hueContainer.addEventListener('mousedown', this.hueMouseDown_bound);
+    this.domRefs.hslContainer.addEventListener('mousedown', this.hslMouseDown_bound);
+    this.domRefs.body.addEventListener('mousemove', this.bodyMouseMove_bound);
+    this.domRefs.body.addEventListener('mouseup', this.bodyMouseUp_bound);
   }
 
   togglePopup() {
@@ -193,21 +240,30 @@ export class ColorPickerComponent {
   }
 
   restoreHsl(rgbValues) {
-    const hslValues = ColorUtils.rgbToHsb(rgbValues);
+    if (rgbValues[3]) {
+      this.setAlpha(rgbValues[3]);
+    }
+
+    const hslValues = ColorUtils.rgbaToHsb(rgbValues);
+
     if (hslValues) {
+      this.setAlphaOverlay(rgbValues);
       this.setHue(hslValues[0]);
       this.setLightnessSaturation(hslValues[2], hslValues[1]);
     }
   }
 
   restoreColors() {
-    const rgbValues = ColorUtils.htmlColorToRgb(this.ngModel.$viewValue);
+    let rgbValues = ColorUtils.htmlColorToRgba(this.ngModel.$viewValue);
 
-    if (rgbValues) {
-      this.setCmyk(ColorUtils.rgbToCmyk(rgbValues));
-      this.restoreHsl(rgbValues);
-      this.selectedColorString = ColorUtils.rgbToHexHtml(rgbValues);
+    if (!rgbValues) {
+      rgbValues = [0, 0, 0, 1];
+      this.selectColor(ColorUtils.rgbaToHtml(rgbValues));
     }
+
+    this.setCmyk(ColorUtils.rgbaToCmyk(rgbValues));
+    this.restoreHsl(rgbValues);
+    this.selectedColorString = ColorUtils.rgbaToHtml(rgbValues);
   }
 
   showPopup() {
@@ -221,12 +277,12 @@ export class ColorPickerComponent {
 
   _selectColor(val) {
     this.ngModel.$setViewValue(val);
-    this.selectedColorString = ColorUtils.rgbToHexHtml(ColorUtils.htmlColorToRgb(val));
+    this.selectedColorString = val;
     this.ngChange({});
   }
 
   cmykChanged() {
-    const rgbValues = ColorUtils.cmykToRgb([this.cmykC, this.cmykM, this.cmykY, this.cmykK]);
+    const rgbValues = ColorUtils.cmykToRgba([this.cmykC, this.cmykM, this.cmykY, this.cmykK]);
     this.restoreHsl(rgbValues);
     this.selectColorFromHsl();
   }

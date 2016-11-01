@@ -2,10 +2,55 @@
 <head>
 <link rel="stylesheet" href="testScriptEntry.css"/>
 </head>
-<body ng-app="testApp">
-qwe! {{ testModel }}
-<br/>
-<ng-chroma ng-model="testModel"></ng-chroma>
-<script src="testScriptEntry.js"></script>
+<body ng-app="testApp" ng-controller="testCtrl">
+
+  <p>
+    Selected color: {{ testModel }}
+  </p>
+
+  <p>
+    List of custom colors: {{ customColors }}
+  </p>
+
+  <p>
+    Test externally set model: <button ng-click="testModel = '#ffff00'">SET</button>
+  </p>
+
+  <p>
+    Plain example: <br/>
+    <ng-chroma ng-model="testModel"></ng-chroma>
+  </p>
+
+  <p>
+    With selected value indicator: <br/>
+    <ng-chroma ng-model="testModel" show-selected-value></ng-chroma>
+  </p>
+
+  <p>
+    With custom colors: <br/>
+    <ng-chroma ng-model="testModel" custom-colors="customColors"></ng-chroma>
+  </p>
+
+  <p>
+    With custom colors and label: <br/>
+    <ng-chroma ng-model="testModel" custom-colors="customColors" custom-colors-label="Saved colors:"></ng-chroma>
+  </p>
+
+  <p>
+    With CMYK controls: <br/>
+    <ng-chroma ng-model="testModel" cmyk-colors></ng-chroma>
+  </p>
+
+  <p>
+    With alpha: <br/>
+    <ng-chroma ng-model="testModel" alpha-colors></ng-chroma>
+  </p>
+
+  <p>
+    With everything: <br/>
+    <ng-chroma ng-model="testModel" cmyk-colors alpha-colors show-selected-value custom-colors="customColors" custom-colors-label="Saved colors:"></ng-chroma>
+  </p>
+
+  <script src="testScriptEntry.js"></script>
 </body>
 </html>
