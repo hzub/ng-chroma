@@ -30,6 +30,7 @@ config.entry = {
 config.output = {
   path: DIST_DIR,
   filename: '[name].js',
+  libraryTarget: 'umd',
 };
 
 config.module = {

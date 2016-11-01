@@ -7,5 +7,5 @@ const moduleName = 'hzub.ngChroma';
 const mod = angular.module(moduleName, ['angular-click-outside']);
 mod.component(ColorPickerComponent.NAME, ColorPickerComponent.OPTIONS);
 
-export default moduleName;
+module.exports = moduleName;
 

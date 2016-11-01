@@ -1,4 +1,14 @@
-/******/ (function(modules) { // webpackBootstrap
+(function webpackUniversalModuleDefinition(root, factory) {
+	if(typeof exports === 'object' && typeof module === 'object')
+		module.exports = factory();
+	else if(typeof define === 'function' && define.amd)
+		define([], factory);
+	else {
+		var a = factory();
+		for(var i in a) (typeof exports === 'object' ? exports : root)[i] = a[i];
+	}
+})(this, function() {
+return /******/ (function(modules) { // webpackBootstrap
 /******/ 	// The module cache
 /******/ 	var installedModules = {};
 
@@ -46,10 +56,6 @@
 
 	'use strict';
 
-	Object.defineProperty(exports, "__esModule", {
-	  value: true
-	});
-
 	__webpack_require__(1);
 
 	var _ngChroma = __webpack_require__(2);
@@ -59,7 +65,7 @@
 	var mod = angular.module(moduleName, ['angular-click-outside']);
 	mod.component(_ngChroma.ColorPickerComponent.NAME, _ngChroma.ColorPickerComponent.OPTIONS);
 
-	exports.default = moduleName;
+	module.exports = moduleName;
 
 /***/ },
 /* 1 */
@@ -2291,4 +2297,6 @@
 	module.exports = "<div class=\"color-picker\" click-outside=\"$ctrl.hidePopup()\">\n    <button ng-click=\"$ctrl.togglePopup()\" class=\"main-button\" ng-class=\"{'isActive': $ctrl.popupShown}\">\n        <div class=\"main-button-background\">\n            <div class=\"main-button-preview\" style=\"background-color: {{$ctrl.ngModel.$viewValue}}\"></div>\n        </div>\n        <i class=\"main-button-caret\"></i>\n    </button>\n    <div class=\"color-picker-selector js-selector\" ng-class=\"{'isShown': $ctrl.popupShown}\" ng-if=\"$ctrl.popupShown\" ng-init=\"$ctrl.onPopupShown()\">\n        <div class=\"user-color-label\" ng-bind=\"::($ctrl.customColorsLabel)\" ng-if=\"::($ctrl.customColorsLabel)\"></div>\n        <div class=\"user-color-container\" ng-if=\"::($ctrl.customColors)\">\n            <button ng-click=\"$ctrl.selectColorAndHide(stdColor)\" ng-repeat=\"stdColor in ::($ctrl.customColors) track by $index\" class=\"user-color\">\n                <div class=\"user-color-preview\" style=\"background-color: {{::stdColor}}\"></div>\n            </button>\n        </div>\n        <div class=\"separator\" ng-if=\"::($ctrl.customColors)\"></div>\n        <div class=\"hsl-selector-container\">\n            <div class=\"hsl-selector-lightness-saturation js-lightness-saturation\">\n                <div class=\"hsl-selector-lightness\">\n                </div>\n                <div class=\"hsl-selector-saturation js-hsl-container\">\n                    <div class=\"hsl-selector-saturation-handle js-hsl-handle\"></div>\n                </div>\n            </div>\n            <div class=\"margin\"></div>\n            <div class=\"hsl-selector-hue js-hue-container\">\n                <div class=\"hsl-selector-hue-handle js-hue-handle\"></div>\n            </div>\n        </div>\n        <div class=\"margin\"></div>\n        <div class=\"alpha-selector\" ng-show=\"::($ctrl.showAlpha)\">\n            <div class=\"alpha-selector-track js-alpha-container\">\n                <div class=\"alpha-selector-overlay js-alpha-overlay\">\n                </div>\n                <div class=\"alpha-selector-handle js-alpha-handle\"></div>\n            </div>\n        </div>\n        <div class=\"picker-cmyk-container\" ng-if=\"::($ctrl.showCmykColors)\">\n            <div class=\"margin\"></div>\n            <div class=\"picker-cmyk\">\n                <div class=\"picker-cmyk-input\">\n                    <span>C:</span>\n                    <input min=\"0\" max=\"100\" type=\"number\" ng-model=\"$ctrl.cmykC\" ng-change=\"$ctrl.cmykChanged()\" />\n                </div>\n                <div class=\"picker-cmyk-input\">\n                    <span>M:</span>\n                    <input min=\"0\" max=\"100\" type=\"number\" ng-model=\"$ctrl.cmykM\" ng-change=\"$ctrl.cmykChanged()\" />\n                </div>\n                <div class=\"picker-cmyk-input\">\n                    <span>Y:</span>\n                    <input min=\"0\" max=\"100\" type=\"number\" ng-model=\"$ctrl.cmykY\" ng-change=\"$ctrl.cmykChanged()\" />\n                </div>\n                <div class=\"picker-cmyk-input\">\n                    <span>K:</span>\n                    <input min=\"0\" max=\"100\" type=\"number\" ng-model=\"$ctrl.cmykK\" ng-change=\"$ctrl.cmykChanged()\" />\n                </div>\n            </div>\n        </div>\n        <div class=\"selected-color\" ng-show=\"::($ctrl.showSelectedValue)\">\n            <div class=\"margin\"></div>\n            <span class=\"selected-color-label\">Selected color:</span> <span class=\"selected-color-value\">{{$ctrl.selectedColorString}}</span>\n        </div>\n    </div>\n</div>\n"
 
 /***/ }
-/******/ ]);
+/******/ ])
+});
+;
