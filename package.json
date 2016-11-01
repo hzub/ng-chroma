@@ -2,7 +2,7 @@
   "name": "ng-chroma",
   "version": "0.0.4",
   "description": "Most beautiful spectrum color picker for angular 1.5+",
-  "main": "index.js",
+  "main": "dist/index.js",
   "scripts": {
     "test": "echo \"Error: no test specified\" && exit 1",
     "build": "webpack -p --config ./webpack.config.build.js",
