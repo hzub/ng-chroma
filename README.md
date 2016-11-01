@@ -14,7 +14,7 @@ Its features includes:
 
 `npm install ng-chroma`
 
-# 2. Including in your project
+# 2. Importing ng-chroma to your project
 
 ### Using UMD (webpack etc.)
 
