@@ -1,6 +1,6 @@
 {
   "name": "ng-chroma",
-  "version": "0.0.3",
+  "version": "0.0.4",
   "description": "Most beautiful spectrum color picker for angular 1.5+",
   "main": "index.js",
   "scripts": {
