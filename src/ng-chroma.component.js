@@ -117,7 +117,7 @@ export class ColorPickerComponent {
 
   selectAlphaFromEvent(e) {
     if (this.selectingAlpha) {
-      let offset = e.pageX - this.selectingAlpha[0];
+      let offset = e.clientX - this.selectingAlpha[0];
 
       offset = Math.min(offset, this.domRefs.alphaContainer.clientWidth);
       offset = Math.max(offset, 0);
@@ -130,7 +130,7 @@ export class ColorPickerComponent {
 
   selectHueFromEvent(e) {
     if (this.selectingHue) {
-      let offset = e.pageX - this.selectingHue[0];
+      let offset = e.clientX - this.selectingHue[0];
       offset = Math.min(offset, this.domRefs.hueContainer.clientWidth);
       offset = Math.max(offset, 0);
 
@@ -153,8 +153,8 @@ export class ColorPickerComponent {
 
   selectSaturationFromEvent(e) {
     if (this.selectingSaturation) {
-      let offsetX = e.pageX - this.selectingSaturation[0];
-      let offsetY = e.pageY - this.selectingSaturation[1];
+      let offsetX = e.clientX - this.selectingSaturation[0];
+      let offsetY = e.clientY - this.selectingSaturation[1];
       offsetX = Math.min(Math.max(offsetX, 0), this.domRefs.hslContainer.clientWidth);
       offsetY = Math.min(Math.max(offsetY, 0), this.domRefs.hslContainer.clientHeight);
       const saturation = 1.0 - (offsetY / this.domRefs.hslContainer.clientHeight);
