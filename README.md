@@ -10,6 +10,8 @@ Its features includes:
 * Alpha channel selector
 * Displaying list of user-defined colors
 
+![7]
+
 # 1. Installing via npm
 
 `npm install ng-chroma`
@@ -144,7 +146,7 @@ Feel free to fork, hack, crack and change everything :). Don't hestitate to cont
 
 # 6. Development
 
-**ng-chroma** goes with webpack build files with commands defined in `package.json`. 
+**ng-chroma** goes with webpack build files with commands defined in `package.json`.
 
 In order to run build script, run:
 `npm run build`
@@ -163,3 +165,4 @@ In order to run watchers on webpack-dev-server with HTML testbed files served, r
 [4]: https://github.com/hzub/ng-chroma/blob/master/resources/stringDemo.png
 [5]: https://github.com/hzub/ng-chroma/blob/master/resources/cmykDemo.png
 [6]: https://github.com/hzub/ng-chroma/blob/master/resources/alphaDemo.png
+[7]: https://github.com/hzub/ng-chroma/blob/master/resources/allDemo.png
