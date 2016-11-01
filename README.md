@@ -2,7 +2,7 @@
 
 ### Description
 
-**ng-chroma** is component for choosing colors using spectrum HSV view, dedicated for Angular 1.5+.
+**ng-chroma** is component for choosing colors using HSB spectrum, dedicated for Angular 1.5+.
 Library was created with simplicity of customization and configuration in mind.
 
 Its features includes:
