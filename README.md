@@ -2,7 +2,7 @@
 
 ### Description
 
-**ng-chroma** is component for choosing colors using spectrum HSV view, dedicated for Angular 1.5+.
+**ng-chroma** is component for choosing colors using HSB spectrum, dedicated for Angular 1.5+.
 Library was created with simplicity of customization and configuration in mind.
 
 Its features includes:
@@ -47,6 +47,10 @@ Just include component in your HTML and provide `ng-model`:
 
 It will render control, hook all event listeners and reflect any change to model in a two-way manner.
 
+Preview:
+
+![1]
+
 ### 3.2 With user provided predefined colors
 
 ```
@@ -61,6 +65,8 @@ $scope.myColors = ['#ff0000', '#0000ff'];
 
 Preview:
 
+![2]
+
 ### 3.3 With user provided predefined colors and label
 
 ```
@@ -69,6 +75,8 @@ Preview:
 ```
 
 Preview:
+
+![3]
 
 ### 3.4 With selected value indicator
 
@@ -79,6 +87,8 @@ Preview:
 
 Preview:
 
+![4]
+
 ### 3.5 With CMYK controls
 ```
 <!-- view.html -->
@@ -87,12 +97,17 @@ Preview:
 
 Preview:
 
+![5]
+
 ### 3.6 With alpha channel
 ```
 <!-- view.html -->
 <ng-chroma ng-model="myModel" alpha-colors></ng-chroma>
 ```
 
+Preview:
+
+![6]
 # 4. Customizing component
 
 All styles can be easily overriden, using following pattern:
@@ -141,3 +156,10 @@ In order to run watchers on webpack-dev-server with HTML testbed files served, r
 
 [WTFPL](http://www.wtfpl.net/)
 
+
+[1]: https://github.com/hzub/ng-chroma/blob/master/resources/simpleDemo.png
+[2]: https://github.com/hzub/ng-chroma/blob/master/resources/userSelectDemo.png
+[3]: https://github.com/hzub/ng-chroma/blob/master/resources/userSelectLabelDemo.png
+[4]: https://github.com/hzub/ng-chroma/blob/master/resources/stringDemo.png
+[5]: https://github.com/hzub/ng-chroma/blob/master/resources/cmykDemo.png
+[6]: https://github.com/hzub/ng-chroma/blob/master/resources/alphaDemo.png
